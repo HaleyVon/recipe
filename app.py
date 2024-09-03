@@ -32,7 +32,7 @@ def load_and_process_image(url, size=(300, 240), corner_radius=15):
         return None
 
 def main():
-    st.set_page_config(page_title="오늘 집밥 레시피", layout="wide")
+    st.set_page_config(page_title=":cook 오늘 집밥 레시피", layout="wide")
 
     # CSS 파일 로드
     with open('style.css', 'r') as f:
@@ -78,7 +78,7 @@ def main():
             ]
 
     # 레시피 목록 섹션
-    st.subheader("레시피 목록")
+    st.subheader("레시피를 선택하세요")
     for recipe in filtered_recipes:
         if st.button(f"{recipe['name']} ({recipe['total_time']})", key=str(recipe['id'])):
             st.session_state.selected_recipe = recipe['id']
