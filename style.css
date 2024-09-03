@@ -1,0 +1,73 @@
+/* style.css */
+.main-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem 0;
+    color: #4A4A4A;
+}
+
+.tag-pill {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    margin: 0.25rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.tag-type { background-color: #007bff; }
+.tag-cuisine { background-color: #28a745; }
+.tag-ingredient { background-color: #dc3545; }
+.tag-other { background-color: #6c757d; }
+
+.stExpander {
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.stExpander > div:first-child {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.recipe-details {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* 반응형 테이블 스타일 */
+.dataframe {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dataframe th, .dataframe td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+@media (min-width: 768px) {
+    .recipe-details {
+        width: 50%;
+    }
+    
+    .dataframe {
+        width: 50%;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-title {
+        font-size: 1.5rem;
+    }
+
+    .tag-pill {
+        font-size: 0.7rem;
+    }
+
+    .dataframe th, .dataframe td {
+        padding: 0.25rem;
+    }
+}
