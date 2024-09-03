@@ -32,7 +32,7 @@ def load_and_process_image(url, size=(300, 240), corner_radius=15):
         return None
 
 def main():
-    st.set_page_config(page_title=":cook 오늘 집밥 레시피", layout="wide")
+    st.set_page_config(page_title="🥘 오늘 집밥 레시피", layout="wide")
 
     # CSS 파일 로드
     with open('style.css', 'r') as f:
@@ -54,7 +54,7 @@ def main():
 
     # 검색 및 필터링 섹션
     with st.expander("레시피 검색하기", expanded=False):
-        search_query = st.text_input("레시피 또는 재료 검색:")
+        search_query = st.text_input("냉장고에 어떤 재료가 있나요?")
         
         # 태그 선택
         selected_tags = {}
