@@ -6,8 +6,7 @@ from io import BytesIO
 import os
 from create_recipe_json import create_recipe_json
 
-# JSON 파일 로드 함수
-@st.cache_data
+# JSON 파일 로드 함수 (캐시 비활성화)
 def load_data():
     json_file = 'recipes.json'
     if not os.path.exists(json_file):
@@ -59,7 +58,7 @@ def main():
     # 메인 타이틀
     st.markdown("<h1 class='main-title'>오늘 집밥 레시피</h1>", unsafe_allow_html=True)
 
-    # 데이터 로드
+    # 데이터 로드 (매번 새로 로드)
     recipes = load_data()
 
     # 모든 태그 추출
