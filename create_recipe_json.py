@@ -61,7 +61,7 @@ def create_recipe_json():
         },
         {
             "id": 3,
-            "source": "이미지 기반 레시피",
+            "source": "블로그",
             "name": "샐러드 우동",
             "total_time": "20분",
             "servings": "1인분",
