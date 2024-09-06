@@ -1,12 +1,13 @@
 import streamlit as st
 import json
-from PIL import Image, ImageDraw
+from PIL import Image
 import requests
 from io import BytesIO
 import os
 from create_recipe_json import create_recipe_json
 
-# JSON 파일 로드 함수 (캐시 비활성화)
+# JSON 파일 로드 함수
+@st.cache_data
 def load_data():
     json_file = 'recipes.json'
     if not os.path.exists(json_file):
@@ -16,32 +17,49 @@ def load_data():
 
 # 이미지 로드 및 처리 함수
 @st.cache_data
-def load_and_process_image(url, size=(300, 240), corner_radius=15):
+def load_and_process_image(url, size=(300, 240)):
     try:
         response = requests.get(url)
         img = Image.open(BytesIO(response.content))
         img = img.resize(size, Image.LANCZOS)
-        mask = Image.new('L', size, 0)
-        draw = ImageDraw.Draw(mask)
-        draw.rounded_rectangle([(0, 0), size], corner_radius, fill=255)
-        img = img.convert("RGBA")
-        rounded_img = Image.new("RGBA", size, (0, 0, 0, 0))
-        rounded_img.paste(img, (0, 0), mask)
-        return rounded_img
+        return img
     except:
         return None
 
 def main():
     st.set_page_config(page_title="🥘 오늘 집밥 레시피", layout="wide")
 
-    # CSS 파일 로드
-    with open('style.css', 'r') as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    # CSS 스타일 적용
+    st.markdown("""
+    <style>
+    .main-title {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #1E1E1E;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .recipe-details {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .tag-pill {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 5px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+    .tag-type { background-color: #FFB6C1; }
+    .tag-cuisine { background-color: #98FB98; }
+    </style>
+    """, unsafe_allow_html=True)
 
     # 메인 타이틀
     st.markdown("<h1 class='main-title'>오늘 집밥 레시피</h1>", unsafe_allow_html=True)
 
-    # 데이터 로드 (매번 새로 로드)
+    # 데이터 로드
     recipes = load_data()
 
     # 모든 태그 추출
@@ -74,7 +92,7 @@ def main():
         if selected:
             filtered_recipes = [
                 recipe for recipe in filtered_recipes
-                if any(tag in recipe['tags'][tag_type] for tag in selected)
+                if any(tag in recipe['tags'].get(tag_type, []) for tag in selected)
             ]
 
     # 레시피 목록 섹션
@@ -96,7 +114,7 @@ def main():
                 tag_html = ""
                 for tag_type, tags in recipe['tags'].items():
                     for tag in tags:
-                        tag_class = f"tag-{tag_type}" if tag_type in ['type', 'cuisine', 'ingredient'] else "tag-other"
+                        tag_class = f"tag-{tag_type}"
                         tag_html += f'<span class="tag-pill {tag_class}">{tag}</span>'
                 st.markdown(tag_html, unsafe_allow_html=True)
                 
@@ -113,6 +131,15 @@ def main():
                     for ingredient in recipe['ingredients']
                 ]
                 st.table(ingredients_data)
+
+                # 소스 (있는 경우)
+                if 'sauce' in recipe:
+                    st.subheader("소스")
+                    sauce_data = [
+                        {"재료": ingredient['name'], "양": ingredient['amount']}
+                        for ingredient in recipe['sauce']
+                    ]
+                    st.table(sauce_data)
 
                 # 조리 순서
                 st.subheader("조리 순서")
